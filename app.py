@@ -1,16 +1,9 @@
-import os
-from dotenv import load_dotenv
-
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_session import Session
 
-
 app = Flask(__name__)
-app.debug = True
-load_dotenv('.env')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
+app.config.from_object('config')
 
 Session(app)
 
@@ -40,7 +33,6 @@ def chat():
 def join(message):
     room = session.get('room')
     join_room(room)
-    print('join!!!')
     emit(
         'status',
         {'msg':  session.get('username') + ' has entered the room.'},
@@ -53,10 +45,12 @@ def text(message):
     room = session.get('room')
     emit(
         'message',
-        {'msg': session.get('username') + ' : ' + message['msg']},
+        {'msg': session.get('username')
+            + ' : '
+            + message['msg']
+         },
         room=room
     )
-    print('text!!!')
 
 
 @socketio.on('left', namespace='/chat')
@@ -67,8 +61,11 @@ def left(message):
     session.clear()
     emit(
         'status',
-        {'msg': username + ' has left the room.'},
-        room=room)
+        {'msg': username
+            + ' has left the room.'
+         },
+        room=room
+    )
     print('left!!!')
 
 
