@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_session import Session
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config.DevelopConfig')
 
 Session(app)
 
