@@ -7,7 +7,8 @@ class Config(object):
     CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.urandom(32)
     SECRET_KEY = os.urandom(32)
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/rh_chat'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://zeman:postgres@localhost:5432/rh_chat'
+    SESSION_TYPE = 'filesystem'
 
 
 class ProductionConfig(Config):
