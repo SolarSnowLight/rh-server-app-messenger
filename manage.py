@@ -1,14 +1,16 @@
 from flask_script import Manager
-from app import app, socketio
+from app import Users_views, socketio
 from flask_migrate import Migrate
 
-manager = Manager(app)
+from app.views.Users_views import socketio
+
+manager = Manager(Users_views)
 
 
 @manager.command
 def runserver():
     if __name__ == '__main__':
-        socketio.run(app)
+        socketio.run(Users_views)
 
 
 if __name__ == "__main__":

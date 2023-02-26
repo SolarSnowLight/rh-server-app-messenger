@@ -5,16 +5,13 @@ from flask import jsonify
 
 
 def create_user(user_data):
-    print('pre try')
     try:
-        print('rty')
         name = user_data.name
         avatar = user_data.avatar
         token = str(os.urandom(32))
         status = True
         time_connected = datetime.datetime.now()
 
-        print('registr')
         Users_repository.create(name=name, avatar=avatar, token=token, status=status, time_connected=time_connected)
 
         return jsonify({'message': f'user {name} created'})
@@ -24,14 +21,26 @@ def create_user(user_data):
 
 def get_users_list():
     try:
-        return Users_repository.get_users_list()
+        users = []
+
+        for user in Users_repository.get_users_list():
+            users.append(
+                {   
+                    'id': user.uuid,
+                    'name': user.name,
+                    'avatar': user.avatar,
+                    'status': user.status
+                }
+            )
+
+        return jsonify(users)
     except Exception as e:
         return jsonify({'message': 'error'})
 
 
-def get_current_user(name):
+def get_current_user(user_id):
     try:
-        user = Users_repository.get_current_user(name=name)
+        user = Users_repository.get_current_user(user_id=user_id)
 
         return jsonify({
             "id": user.uuid,
@@ -43,15 +52,15 @@ def get_current_user(name):
         return jsonify({'message': 'error'})
 
 
-def update_user(user_data, name):
+def update_user(user_data, user_id):
     try:
-        return Users_repository.update_user(user_data=user_data, name=name)
+        return Users_repository.update_user(user_data=user_data, user_id=user_id)
     except Exception as e:
         return jsonify({'message': 'error'})
 
 
-def delete_user(name):
+def delete_user(user_id):
     try:
-        return Users_repository.delete_user(name=name)
+        return Users_repository.delete_user(user_id=user_id)
     except Exception as e:
         return jsonify({'message': 'error'})

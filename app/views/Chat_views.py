@@ -1,19 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
-from flask_session import Session
-from ..pydantic_models.Users import CreateUser, UpdateUser
-from flask_pydantic import validate
-from ..services import User_service
-from flask_sqlalchemy import SQLAlchemy
 from app import app, socketio
-
-# app = Flask(__name__)
-# app.config.from_object('config.DevelopConfig')
-# db = SQLAlchemy(app)
-
-# Session(app)
-
-# socketio = SocketIO(app, manage_session=False)
+from flask_pydantic import validate
+from ..services import Chat_service
+from ..pydantic_models.Chats import CreateChat, UpdateChat
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -35,6 +25,34 @@ def chat():
     return redirect(url_for('index'))
 
 
+@app.route('/chat/create', methods=['POST'])
+@validate()
+def create_chat(body: CreateChat):
+    return Chat_service.create_chat(chat_data=body)
+
+
+@app.route('/chat/all', methods=['GET'])
+def get_all_chats():
+    return Chat_service.get_chats_list()
+
+
+@app.route('/chat/<chat_id>/info', methods=['GET'])
+def get_current_chat(chat_id: str):
+    return Chat_service.get_current_chat(chat_id=chat_id)
+
+
+@app.route('/chat/<chat_id>/update', methods=['PUT'])
+@validate()
+def update_chat(chat_id: str, body: UpdateChat):
+    return Chat_service.update_chat(chat_data=body, chat_id=chat_id)
+
+
+@app.route('/chat/<chat_id>/delete', methods=['DELETE'])
+@validate()
+def delete_chat(chat_id: str):
+    return Chat_service.delete_chat(chat_id=chat_id)
+
+
 @socketio.on('join', namespace='/chat')
 def join(message):
     room = session.get('room')
@@ -44,6 +62,8 @@ def join(message):
         {'msg':  session.get('username') + ' has entered the room.'},
         room=room
     )
+
+
 
 
 @socketio.on('text', namespace='/chat')
@@ -73,39 +93,3 @@ def left(message):
         room=room
     )
     print('left!!!')
-
-
-@app.route('/users/create', methods=['POST'])
-@validate()
-def create_user(body: CreateUser):
-    print('data get')
-    return User_service.create_user(user_data=body)
-
-
-@app.route('/users/all', methods=['GET'])
-def get_all_users():
-    return User_service.get_users_list()
-
-
-@app.route('/users/<name>/info', methods=['GET'])
-def get_current_user(name: str):
-    return User_service.get_current_user(name=name)
-
-
-@app.route('/users/<name>/update', methods=['PUT'])
-@validate()
-def update_user(name: str, body: UpdateUser):
-    return User_service.update_user(user_data=body, name=name)
-
-
-@app.route('/users/<name>/delete', methods=['DELETE'])
-@validate()
-def delete_user(name: str):
-    return User_service.delete_user(name=name)
-
-
-# if __name__ == '__main__':
-#     # db.init_app(app)
-#     app.app_context().push()
-#     db.create_all()
-#     socketio.run(app)

@@ -4,5 +4,3 @@ from flask_session import Session
 """добавить описание логики месседжера, попробовать использовать blueprints"""
 
 
-def create_user(user_data):
-    

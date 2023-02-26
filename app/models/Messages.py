@@ -2,8 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from sqlalchemy.sql import func
+from app import db
+from app.models.Chat import Chats
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 class Messages(db.Model):
@@ -28,6 +30,9 @@ class Messages(db.Model):
             'chats.user_id2'
         )
     )
+    message = db.Column(
+        db.String
+    )
     created_at = db.Column(
         db.DateTime(timezone=True),
         server_default=func.now()
@@ -37,6 +42,9 @@ class Messages(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now()
     )
+
+    chat = db.relationship("Chats", foreign_keys=[chat_id])
+    user = db.relationship("Chats", foreign_keys=[user_id])
 
     def __repr__(self):
         return f'{self.chat_id} {self.user_id}'

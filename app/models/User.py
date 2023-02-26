@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from sqlalchemy.sql import func
 from app import db
+# from app.models.Chat import Chats
 
 # db = SQLAlchemy()
 
@@ -52,6 +53,12 @@ class Users(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now()
     )
+
+    # chats = db.relationship('Chats', lazy=True)
+    # chats = db.relationship('Chats', lazy=True)
+    # chats_user2 = db.relationship('Chats', backref='user2', lazy=True)
+
+    # chats = db.relationship("Chats", secondary='chats_users')
 
     def __repr__(self):
         return f'{self.uuid} {self.name} {self.avatar}'
