@@ -16,6 +16,7 @@ def create_user(user_data):
 
         return jsonify({'message': f'user {name} created'})
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -26,7 +27,8 @@ def get_users_list():
         for user in Users_repository.get_users_list():
             users.append(
                 {   
-                    'id': user.uuid,
+                    "id": user.id,
+                    'uuid': user.uuid,
                     'name': user.name,
                     'avatar': user.avatar,
                     'status': user.status
@@ -35,6 +37,7 @@ def get_users_list():
 
         return jsonify(users)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -43,12 +46,14 @@ def get_current_user(user_id):
         user = Users_repository.get_current_user(user_id=user_id)
 
         return jsonify({
-            "id": user.uuid,
+            "id": user.id,
+            "uuid": user.uuid,
             "name": user.name,
             "avatar": user.avatar,
             "status": user.status
         })
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -56,6 +61,7 @@ def update_user(user_data, user_id):
     try:
         return Users_repository.update_user(user_data=user_data, user_id=user_id)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -63,4 +69,5 @@ def delete_user(user_id):
     try:
         return Users_repository.delete_user(user_id=user_id)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})

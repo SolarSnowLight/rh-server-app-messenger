@@ -4,10 +4,9 @@ from flask import jsonify
 
 def create_message(message_data):
     try:
-        Messages_repository.create(message_data=message_data)
-
-        return jsonify({'message': f'new message created'})
+        return jsonify({'message': f'{Messages_repository.create(message_data=message_data)}'})
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -29,6 +28,7 @@ def get_messages_list():
 
         return jsonify(messages)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -43,6 +43,7 @@ def get_current_message(message_id):
             'message': message.message
         })
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -50,6 +51,7 @@ def update_message(message_data, message_id):
     try:
         return Messages_repository.update_message(message_data=message_data, message_id=message_id)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})
 
 
@@ -57,4 +59,5 @@ def delete_message(message_id):
     try:
         return Messages_repository.delete_message(message_id=message_id)
     except Exception as e:
+        print(e)
         return jsonify({'message': 'error'})

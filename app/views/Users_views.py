@@ -7,14 +7,6 @@ from ..services import User_service
 from flask_sqlalchemy import SQLAlchemy
 from app import app, socketio
 
-# app = Flask(__name__)
-# app.config.from_object('config.DevelopConfig')
-# db = SQLAlchemy(app)
-
-# Session(app)
-
-# socketio = SocketIO(app, manage_session=False)
-
 
 @app.route('/users/create', methods=['POST'])
 @validate()
@@ -28,24 +20,17 @@ def get_all_users():
 
 
 @app.route('/users/<user_id>/info', methods=['GET'])
-def get_current_user(user_id: str):
+def get_current_user(user_id: int):
     return User_service.get_current_user(user_id=user_id)
 
 
 @app.route('/users/<user_id>/update', methods=['PUT'])
 @validate()
-def update_user(user_id: str, body: UpdateUser):
+def update_user(user_id: int, body: UpdateUser):
     return User_service.update_user(user_data=body, user_id=user_id)
 
 
 @app.route('/users/<user_id>/delete', methods=['DELETE'])
 @validate()
-def delete_user(user_id: str):
+def delete_user(user_id: int):
     return User_service.delete_user(user_id=user_id)
-
-
-# if __name__ == '__main__':
-#     # db.init_app(app)
-#     app.app_context().push()
-#     db.create_all()
-#     socketio.run(app)

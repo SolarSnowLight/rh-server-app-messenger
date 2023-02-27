@@ -10,30 +10,26 @@ def create(name, avatar, token, status, time_connected):
 
 
 def get_users_list():
-    # try:
     users = Users.query.all()
     return users
-    # except Exception as e:
-    #     print(e)
 
 
 def get_current_user(user_id):
-    user = db.session.query(Users).filter(Users.uuid==user_id).first()
+    user = db.session.query(Users).filter(Users.id==user_id).first()
     return user
 
 
 def update_user(user_data, user_id):
-    user = db.session.query(Users).filter(Users.uuid==user_id).first()
+    user = db.session.query(Users).filter(Users.id==user_id).first()
     user.name = user_data.name
     user.avatar = user_data.avatar
-    # user.status = user_data.status
 
     db.session.commit()
     return f'user {user_id} updated'
 
 
 def delete_user(user_id):
-    user = Users.query.filter_by(uuid=user_id).delete()
+    user = Users.query.filter_by(id=user_id).delete()
     db.session.commit()
 
     return f'user with uuid {user_id} deleted'

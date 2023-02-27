@@ -37,19 +37,19 @@ def get_all_chats():
 
 
 @app.route('/chat/<chat_id>/info', methods=['GET'])
-def get_current_chat(chat_id: str):
+def get_current_chat(chat_id: int):
     return Chat_service.get_current_chat(chat_id=chat_id)
 
 
 @app.route('/chat/<chat_id>/update', methods=['PUT'])
 @validate()
-def update_chat(chat_id: str, body: UpdateChat):
+def update_chat(chat_id: int, body: UpdateChat):
     return Chat_service.update_chat(chat_data=body, chat_id=chat_id)
 
 
 @app.route('/chat/<chat_id>/delete', methods=['DELETE'])
 @validate()
-def delete_chat(chat_id: str):
+def delete_chat(chat_id: int):
     return Chat_service.delete_chat(chat_id=chat_id)
 
 
@@ -62,8 +62,6 @@ def join(message):
         {'msg':  session.get('username') + ' has entered the room.'},
         room=room
     )
-
-
 
 
 @socketio.on('text', namespace='/chat')

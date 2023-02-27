@@ -4,8 +4,7 @@ import uuid
 from sqlalchemy.sql import func
 from app import db
 from app.models.Chat import Chats
-
-# db = SQLAlchemy()
+from app.models.User import Users
 
 
 class Messages(db.Model):
@@ -15,19 +14,26 @@ class Messages(db.Model):
         'comment': 'Сообщения пользователей'
     }
 
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
     uuid = db.Column(
-        UUID(as_uuid=True),
-        primary_key=True,
+        # UUID(as_uuid=True),
+        # primary_key=True,
+        db.String(36),
         default=uuid.uuid4
     )
     chat_id = db.Column(
-        UUID, db.ForeignKey(
-            'chats.uuid'
+        db.Integer,
+        db.ForeignKey(
+            'chats.id'
         )
     )
     user_id = db.Column(
-        UUID, db.ForeignKey(
-            'chats.user_id2'
+        db.Integer,
+        db.ForeignKey(
+            'users.id'
         )
     )
     message = db.Column(
@@ -43,8 +49,12 @@ class Messages(db.Model):
         server_onupdate=db.func.now()
     )
 
+    # ссылка на таблицу "chats" для чата, к которому
+    # принадлежит сообщение
     chat = db.relationship("Chats", foreign_keys=[chat_id])
-    user = db.relationship("Chats", foreign_keys=[user_id])
+
+    # ссылка на таблицу "users" для отправителя сообщения
+    user = db.relationship("Users", foreign_keys=[user_id])
 
     def __repr__(self):
         return f'{self.chat_id} {self.user_id}'
