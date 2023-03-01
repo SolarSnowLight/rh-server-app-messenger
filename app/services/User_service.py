@@ -7,12 +7,11 @@ from flask import jsonify
 def create_user(user_data):
     try:
         name = user_data.name
-        avatar = user_data.avatar
         token = str(os.urandom(32))
         status = True
         time_connected = datetime.datetime.now()
 
-        Users_repository.create(name=name, avatar=avatar, token=token, status=status, time_connected=time_connected)
+        Users_repository.create(name=name, token=token, status=status, time_connected=time_connected)
 
         return jsonify({'message': f'user {name} created'})
     except Exception as e:
@@ -30,7 +29,6 @@ def get_users_list():
                     "id": user.id,
                     'uuid': user.uuid,
                     'name': user.name,
-                    'avatar': user.avatar,
                     'status': user.status
                 }
             )
@@ -49,7 +47,6 @@ def get_current_user(user_id):
             "id": user.id,
             "uuid": user.uuid,
             "name": user.name,
-            "avatar": user.avatar,
             "status": user.status
         })
     except Exception as e:

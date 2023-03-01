@@ -28,10 +28,10 @@ class Users(db.Model):
         comment='Имя пользователя',
         nullable=False
     )
-    avatar = db.Column(
-        db.String(128),
-        comment='Аватар'
-    )
+    # avatar = db.Column(
+    #     db.String(128),
+    #     comment='Аватар'
+    # )
     token = db.Column(
         db.String(128),
         comment='Токен пользователя',

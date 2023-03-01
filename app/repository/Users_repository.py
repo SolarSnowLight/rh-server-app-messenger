@@ -1,8 +1,8 @@
 from app import db
 from ..models.User import Users
 
-def create(name, avatar, token, status, time_connected):
-    user = Users(name=name, avatar=avatar, token=token, time_connected=time_connected, status=status)
+def create(name, token, status, time_connected):
+    user = Users(name=name, token=token, time_connected=time_connected, status=status)
     db.session.add(user)
     db.session.commit()
 

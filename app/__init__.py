@@ -9,5 +9,5 @@ db = SQLAlchemy(app)
 Session(app)
 socketio = SocketIO(app, manage_session=False)
 
-from app.models import Chat, User, Messages
+from app.models import Chat, User, Messages, File
 from app.views import Users_views, Chat_views, Messages_views
